@@ -30,4 +30,4 @@ const UserSchema = mongoose.Schema
     },{timestamps:true}
 );
 UserSchema.index({Email:1})
-GPUShaderModule.export = mongoose.model("User",UserSchema);
+module.exports = mongoose.models.User || mongoose.model("User", UserSchema);

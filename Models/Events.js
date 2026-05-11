@@ -1,6 +1,6 @@
-const Mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const EventSchema = new Mongoose.Schema
+const EventSchema = new mongoose.Schema
 ({
     Title:
     {
@@ -45,6 +45,6 @@ const EventSchema = new Mongoose.Schema
 
 EventSchema.index({
     Category:1,
-    date:1
+    Date:1
 });
-module.export = Mongoose.model("Schema",EventSchema);
+module.exports = mongoose.models.Event || mongoose.model("Event", EventSchema);

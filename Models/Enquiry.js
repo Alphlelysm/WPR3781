@@ -1,6 +1,6 @@
-const Mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const EnquirySchema = new Mongoose.Schema
+const EnquirySchema = new mongoose.Schema
 ({
 
     user: 
@@ -29,4 +29,4 @@ const EnquirySchema = new Mongoose.Schema
 
 }, { timestamps: true });
 
-module.exports = Mongoose.model("Enquiry", EnquirySchema);
+module.exports = mongoose.models.Enquiry || mongoose.model("Enquiry", EnquirySchema);
