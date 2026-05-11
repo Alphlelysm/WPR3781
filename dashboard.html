@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AETicketHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">
+            <img src="AE logo.png.png" alt="AETicketHub Logo" class="nav-logo">
+        </a>
+        <ul class="nav-links"></ul>
+    </nav>
+
+    <div class="container">
+        <h2 id="welcomeText" style="color: var(--main-blue);">Dashboard</h2>
+
+        <!-- standard user dashboard -->
+        <div id="userSection" class="hidden">
+            <h3>My Ticket Bookings</h3>
+            <div id="myTicketsList"></div>
+        </div>
+
+        <!-- admin dashboard -->
+        <div id="adminSection" class="hidden">
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
+                <div style="flex: 1; min-width: 200px; background: var(--main-blue); color: white; padding: 20px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0;">Total Active Events</h4>
+                    <h2 id="totalEventsStat" style="margin: 0;">0</h2>
+                </div>
+                <div style="flex: 1; min-width: 200px; background: var(--main-red); color: white; padding: 20px; border-radius: 8px;">
+                    <h4 style="margin: 0 0 10px 0;">Total Tickets Sold</h4>
+                    <h2 id="totalBookingsStat" style="margin: 0;">0</h2>
+                </div>
+            </div>
+
+            <div style="background:white; padding:25px; margin-bottom:25px; border-radius:8px; border-left: 5px solid var(--main-red); box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                <h3 style="margin-top:0;">Add New Event</h3>
+                <form id="createEventForm">
+                    <input type="text" id="newEvName" placeholder="Event Name" required>
+                    <input type="date" id="newEvDate" required>
+                    <input type="text" id="newEvVenue" placeholder="Venue Location" required>
+                    <input type="number" id="newEvCap" placeholder="Maximum Capacity" required>
+                    <select id="newEvCat">
+                        <option value="corporate">Corporate Conference</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="festival">Music Festival</option>
+                        <option value="private">Private Event</option>
+                    </select>
+                    <button type="submit">Create Event in System</button>
+                </form>
+            </div>
+
+            <h3>Event Management</h3>
+            <div id="adminEventsList"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

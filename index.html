@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETicketHub - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">
+            
+            <img src="AE logo.png.png" alt="AETicketHub Logo" class="nav-logo">
+        </a>
+        <ul class="nav-links"></ul>
+    </nav>
+
+    <div class="hero">
+        <h1>Your Gateway to Live Events</h1>
+        <p>The official booking system for Advanced Events (Pty) Ltd.</p>
+    </div>
+
+    <div class="container">
+        <div class="filter-bar" style="background: white; padding: 20px; margin-bottom: 20px; display:flex; gap:10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <input type="text" id="searchInput" placeholder="Search events by name..." style="margin:0; flex: 2;">
+            <select id="categoryFilter" style="margin:0; flex: 1;">
+                <option value="all">All Events</option>
+                <option value="corporate">Corporate Conferences</option>
+                <option value="workshop">Workshops</option>
+                <option value="festival">Music Festivals</option>
+                <option value="private">Private Events</option>
+            </select>
+            <button id="searchBtn" style="flex: 1; margin: 0;">Search</button>
+        </div>
+
+        <div class="events-grid" id="eventGrid">
+            <!-- js loads here -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

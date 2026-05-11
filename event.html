@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">
+            <img src="AE logo.png.png" alt="AETicketHub Logo" class="nav-logo">
+        </a>
+        <ul class="nav-links"></ul>
+    </nav>
+
+    <div class="container">
+        <div id="eventInfo" style="background:white; padding:30px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.05);">
+            <button onclick="window.location.href='index.html'" style="margin-bottom:20px; background:#666; width: auto;">&larr; Back to Events</button>
+            
+            <h1 id="evTitle" style="color: var(--main-blue); margin-top: 0;">Loading...</h1>
+            <p id="evDate" style="font-weight: 500;"></p>
+            <p id="evVenue"></p>
+            <p id="evTickets" style="color: var(--main-red); font-weight: bold;"></p>
+            
+            <hr style="margin:30px 0; border:0; border-top:1px solid #eee;">
+
+            <div id="bookingSection" style="background: #f9f9f9; padding: 20px; border-radius: 6px;">
+                <h3 style="margin-top: 0;">Secure Your Tickets</h3>
+                <label>Number of Tickets:</label>
+                <input type="number" id="ticketQty" value="1" min="1" style="max-width: 150px; display: block;">
+                <button id="bookBtn" style="width: auto;">Confirm Booking</button>
+                <span id="bookMsg" class="error" style="margin-top: 10px;"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
