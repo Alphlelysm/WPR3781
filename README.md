@@ -17,28 +17,15 @@ contact enquiry management.
 - Contact enquiry submission and management.
 - MongoDB persistence through Mongoose models.
 
-## Technologies Used
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JSON Web Tokens
-- bcrypt password hashing
-- EJS
-- HTML5
-- CSS3
-- JavaScript
-
 ## Team Members and Roles
 
-| Student | Student Number | Role |
-| --- | --- | --- |
-| Ethan Ogle | 602114 | Presentation, assignment alignment, final QA |
-| Jaden Van der Lely | 600690 | GitHub repository, authentication, security |
-| Aphiwe Shabalala | 602517 | MongoDB, Mongoose models, database integration |
-| Nokwanda Legoabe | 578051 | Frontend, EJS pages, routing UI |
-| Agobakwe Sedikwe | 576505 | Express backend, controllers, routes, business logic |
+| Student            | Student Number | Role                                                 |
+| ------------------ | -------------- | ---------------------------------------------------- |
+| Ethan Ogle         | 602114         | Presentation, assignment alignment, final QA         |
+| Jaden Van der Lely | 600690         | GitHub repository, authentication, security          |
+| Aphiwe Shabalala   | 602517         | MongoDB, Mongoose models, database integration       |
+| Nokwanda Legoabe   | 578051         | Frontend, EJS pages, routing UI                      |
+| Agobakwe Sedikwe   | 576505         | Express backend, controllers, routes, business logic |
 
 ## Setup Instructions
 
@@ -62,7 +49,7 @@ JWT_SECRET=replace-this-with-a-secure-secret
 npm start
 ```
 
-6. Open the application:
+1. Open the application:
 
 ```text
 http://localhost:5000
@@ -84,53 +71,6 @@ Save the generated value like this:
 JWT_SECRET=paste-generated-secret-here
 ```
 
-After the server is running and a user exists, log in to receive a JWT token.
-
-PowerShell:
-
-```powershell
-$body = @{
-  email = "user@example.com"
-  password = "password123"
-} | ConvertTo-Json
-
-Invoke-RestMethod `
-  -Method Post `
-  -Uri "http://localhost:5000/api/auth/login" `
-  -ContentType "application/json" `
-  -Body $body
-```
-
-curl:
-
-```bash
-curl -X POST "http://localhost:5000/api/auth/login" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"user@example.com\",\"password\":\"password123\"}"
-```
-
-Use the returned token on protected routes:
-
-```bash
-curl "http://localhost:5000/api/admin/dashboard" \
-  -H "Authorization: Bearer <token>"
-```
-
-Do not commit `.env` or real JWT secrets to GitHub.
-
-## Project Structure
-
-```text
-Controllers/      Express controller logic
-MiddleWare/       Authentication, authorization, and error middleware
-Models/           Mongoose schemas
-Services/         Dashboard service logic
-Views/            Frontend pages/templates and public assets
-config/           MongoDB connection
-routes/           Express route definitions
-server.js         Express app entry point
-```
-
 ## Demo Flow
 
 1. Start MongoDB and the Express server.
@@ -146,15 +86,15 @@ server.js         Express app entry point
 11. Submit a contact enquiry.
 12. Show admin enquiry management.
 
-## Related Documentation
+## Technologies Used
 
-- `GAP_ANALYSIS.md` contains the assignment checklist validation and remaining
-  submission gaps.
-- `WPR371 Project 2026.pdf` is the assignment source document.
-
-## Academic Integrity Note
-
-All submitted code, documentation, and presentation explanations must be the
-group's own work. External resources and AI-assisted tools may be used for
-learning support, but the group must understand and be able to explain every
-code and design decision during the project demonstration.
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Tokens
+- bcrypt password hashing
+- EJS
+- HTML5
+- CSS3
+- JavaScript
