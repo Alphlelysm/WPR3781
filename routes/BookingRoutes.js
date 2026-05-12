@@ -1,14 +1,9 @@
-const router =
-    require("express").Router();
+const express = require("express");
+const router = express.Router();
+const bookingController = require("../controllers/bookingController");
+const { isAuthenticated } = require("../middleware/authMiddleware");
 
-const bookingController =
-    require("../Controllers/BookingsController");
+router.post("/:eventId", isAuthenticated, bookingController.bookEvent);
+router.get("/history/my-bookings", isAuthenticated, bookingController.getUserBookings);
 
-
-router.post(
-    "/create",
-    bookingController.createBooking
-);
-
-module.exports =
-    router;
+module.exports = router;
