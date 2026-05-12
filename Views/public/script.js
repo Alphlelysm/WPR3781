@@ -183,3 +183,66 @@ if (window.location.pathname.includes("index.html") || window.location.pathname 
         });
     }
 }
+
+// EVENT DETAILS + BOOKING
+// =====================
+if (window.location.pathname.includes("event.html")) {
+    const params = new URLSearchParams(window.location.search);
+    const eventId = Number(params.get("id"));
+    const events = JSON.parse(localStorage.getItem("events") || "[]");
+    const event = events.find((ev) => ev.id === eventId);
+
+    const title = document.getElementById("evTitle");
+    const date = document.getElementById("evDate");
+    const venue = document.getElementById("evVenue");
+    const tickets = document.getElementById("evTickets");
+    const bookButton = document.getElementById("bookBtn");
+    const message = document.getElementById("bookMsg");
+
+    if (event && title && date && venue && tickets) {
+        const available = event.cap - event.booked;
+
+        title.innerText = event.name;
+        date.innerText = `Date: ${event.date}`;
+        venue.innerText = `Venue: ${event.venue}`;
+        tickets.innerText = available > 0 ? `${available} tickets available` : "Sold out";
+    }
+
+    if (bookButton) {
+        bookButton.addEventListener("click", () => {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (!event) {
+                message.innerText = "Event not found";
+                return;
+            }
+
+            const quantity = Number(document.getElementById("ticketQty").value);
+            const available = event.cap - event.booked;
+
+            if (quantity < 1 || quantity > available) {
+                message.innerText = "Not enough tickets available";
+                return;
+            }
+
+            event.booked += quantity;
+            localStorage.setItem("events", JSON.stringify(events));
+
+            const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+            bookings.push({
+                eventId: event.id,
+                name: event.name,
+                quantity,
+                date: event.date
+            });
+            localStorage.setItem("bookings", JSON.stringify(bookings));
+
+            window.location.href = "dashboard.html";
+        });
+    }
+}
