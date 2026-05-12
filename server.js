@@ -21,6 +21,14 @@ app.get("/", (req, res) => {
     });
 });
 
+app.get("/register", (req, res) => {
+    res.sendFile(path.join(__dirname, "Views", "public", "register.html"));
+});
+
+app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, "Views", "public", "login.html"));
+});
+
 // Static files
 app.use(express.static(path.join(__dirname, "Views", "public"), { index: false }));
 

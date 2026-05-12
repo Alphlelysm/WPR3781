@@ -4,48 +4,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const regForm = document.getElementById("regForm");
 
-    if (!regForm) {
-        console.log("regForm not found");
-        return;
-    }
+    if (!regForm) return;
 
     regForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        console.log("🔥 REGISTER CLICKED");
-
-        const name = document.getElementById("regFullName").value;
-        const email = document.getElementById("regEmail").value;
-        const idNumber = document.getElementById("regIdNumber").value;
-        const phone = document.getElementById("regPhone").value;
-        const username = document.getElementById("regUser").value;
-        const password = document.getElementById("regPass").value;
+      const name = document.getElementById("regFullName").value;
+const email = document.getElementById("regEmail").value;
+const idNumber = document.getElementById("regIdNumber").value;
+const phone = document.getElementById("regPhone").value;
+const password = document.getElementById("regPass").value;
 
         try {
             const res = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    idNumber,
-                    phone,
-                    username,
-                    password
-                })
+               body: JSON.stringify({
+                name,
+                email,
+                idNumber,
+                phone,
+                password
+        })
             });
 
             const data = await res.text();
-            console.log("SERVER RESPONSE:", data);
+            console.log("REGISTER RESPONSE:", data);
+
+            alert("Account created! Please login.");
+
+            window.location.href = "/login";
 
         } catch (err) {
-            console.log("ERROR:", err);
+            console.log("REGISTER ERROR:", err);
         }
     });
+
 });
 
 
-// =====================
 // AUTH: LOGIN (JWT)
 // =====================
 const loginForm = document.getElementById("loginForm");
@@ -54,30 +51,31 @@ if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email = document.getElementById("loginUser").value;
+        const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPass").value;
 
         try {
             const res = await fetch("/api/auth/login", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
             });
 
             const data = await res.json();
 
             if (!res.ok) {
-                document.getElementById("loginMsg").innerText = data.message || "Login failed";
+                document.getElementById("loginMsg").innerText = data.message;
                 return;
             }
 
-            // store JWT
             localStorage.setItem("token", data.token);
 
-            // redirect
-            window.location.href = "dashboard.html";
+            // ROLE REDIRECT (IMPORTANT)
+            if (data.role === "admin") {
+                window.location.href = "/admin.html";
+            } else {
+                window.location.href = "/events.html";
+            }
 
         } catch (err) {
             document.getElementById("loginMsg").innerText = "Server error";
@@ -86,8 +84,7 @@ if (loginForm) {
 }
 
 
-// =====================
-// NAVBAR (OPTIONAL UI ONLY)
+// NAVBAR
 // =====================
 function updateNavbar() {
     const navLinks = document.querySelector(".nav-links");
@@ -119,8 +116,6 @@ function updateNavbar() {
 
 updateNavbar();
 
-
-// =====================
 // DASHBOARD SECURITY
 // =====================
 if (window.location.pathname.includes("dashboard.html")) {
@@ -135,7 +130,7 @@ if (window.location.pathname.includes("dashboard.html")) {
 
 
 // =====================
-// EVENTS (LOCAL STORAGE STILL OK)
+// EVENTS 
 // =====================
 if (!localStorage.getItem("events")) {
     const defaultEvents = [
@@ -152,7 +147,6 @@ if (!localStorage.getItem("bookings")) localStorage.setItem("bookings", JSON.str
 if (!localStorage.getItem("enquiries")) localStorage.setItem("enquiries", JSON.stringify([]));
 
 
-// =====================
 // HOME PAGE EVENTS
 // =====================
 if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {

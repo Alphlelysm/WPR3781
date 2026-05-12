@@ -6,7 +6,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* slightly better font */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: var(--bg-light);
@@ -14,20 +14,21 @@ body {
     line-height: 1.6;
 }
 
-/* nav stuff*/
+/* =========================
+   NAVBAR
+========================= */
 nav {
     background-color: var(--main-blue);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* helps on mobile */
+    flex-wrap: wrap;
 }
 
-/* styles the image logo */
 .nav-logo {
-    height: 50px; 
-    background: white; 
+    height: 50px;
+    background: white;
     padding: 5px 10px;
     border-radius: 4px;
 }
@@ -52,6 +53,9 @@ nav {
     color: var(--main-red);
 }
 
+/* =========================
+   LAYOUT CONTAINERS
+========================= */
 .container {
     width: 90%;
     max-width: 1000px;
@@ -67,17 +71,33 @@ nav {
     margin-bottom: 30px;
 }
 
-/* forms and inputs  */
-input, select, textarea {
+/* =========================
+   FORMS
+========================= */
+input,
+select,
+textarea {
     width: 100%;
     padding: 12px;
     margin: 8px 0 15px 0;
     border: 1px solid #ccc;
     border-radius: 6px;
-    box-sizing: border-box; 
-    font-size: 16px; 
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: 0.2s;
 }
 
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--main-blue);
+    outline: none;
+    box-shadow: 0 0 5px rgba(1, 33, 105, 0.3);
+}
+
+/* =========================
+   BUTTONS
+========================= */
 button {
     background-color: var(--main-red);
     color: white;
@@ -87,7 +107,7 @@ button {
     font-size: 16px;
     border-radius: 6px;
     font-weight: bold;
-    width: 100%; 
+    width: 100%;
     transition: 0.2s;
 }
 
@@ -95,7 +115,9 @@ button:hover {
     background-color: #a00b23;
 }
 
-/* grids for events */
+/* =========================
+   EVENT CARDS
+========================= */
 .events-grid {
     display: flex;
     flex-wrap: wrap;
@@ -107,11 +129,9 @@ button:hover {
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
-    width: calc(33% - 20px);
-    min-width: 280px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    flex-grow: 1; /* fills empty space nicely */
+    flex: 1 1 280px;
 }
 
 .card h3 {
@@ -119,16 +139,69 @@ button:hover {
     color: var(--main-blue);
 }
 
+/* =========================
+   AUTH (LOGIN / REGISTER)
+========================= */
 .auth-wrapper {
-    display: flex; 
-    gap: 40px; 
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 40px;
 }
 
-/* general stuff */
-.hidden { display: none !important; }
-.error { color: var(--main-red); font-size: 14px; margin-top: -10px; margin-bottom: 10px; display: block;}
-.success { color: green; font-size: 14px;}
+.auth-wrapper > div {
+    flex: 1;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    max-width: 450px;
+}
 
+.auth-wrapper h2 {
+    margin-top: 0;
+    color: var(--main-blue);
+}
+
+/* =========================
+   AUTH LINK (REGISTER TEXT)
+========================= */
+.auth-link {
+    font-size: 13px;
+    margin-top: 15px;
+    text-align: center;
+    color: #555;
+}
+
+.auth-link a {
+    color: #1e90ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   ERROR / SUCCESS TEXT
+========================= */
+.error {
+    color: var(--main-red);
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.success {
+    color: green;
+    font-size: 14px;
+}
+
+/* =========================
+   DASHBOARD BOXES
+========================= */
 .dash-box {
     background: white;
     padding: 15px;
@@ -138,26 +211,41 @@ button:hover {
     border-radius: 4px;
 }
 
+/* =========================
+   UTILITY
+========================= */
+.hidden {
+    display: none !important;
+}
 
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
 @media (max-width: 768px) {
+
     nav {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
+
     .nav-links {
         justify-content: center;
         width: 100%;
         flex-wrap: wrap;
     }
+
     .card {
-        width: 100%; /* cards stack on small screens */
+        width: 100%;
     }
+
     .auth-wrapper {
-        flex-direction: column; /* login/register stack on mobile */
-        gap: 20px;
+        flex-direction: column;
+        align-items: center;
     }
-    .filter-bar {
-        flex-direction: column; /* search bar stacks */
+
+    .auth-wrapper > div {
+        width: 100%;
+        max-width: 100%;
     }
 }

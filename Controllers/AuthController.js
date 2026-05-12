@@ -13,7 +13,7 @@ const registerUser = async (req, res) => {
 
         const { name, email, password } = req.body;
 
-        // check duplicate email (IMPORTANT: Email with capital E)
+        // check duplicate email 
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
         // hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // SAVE USER (MATCH SCHEMA EXACTLY)
+        // SAVE USER 
         const newUser = await User.create({
              name,
              email,
@@ -72,11 +72,14 @@ const loginUser = async (req, res) => {
             { expiresIn: "1h" }
         );
 
-        res.json({
-            message: "Login successful",
-            token,
-            user
-        });
+     res.json({
+    message: "Login successful",
+    token,
+    role: user.role,
+    redirect: user.role === "admin"
+        ? "/admin.html"
+        : "/events.html"
+    });
 
     } catch (error) {
         return res.status(500).send(error.message);

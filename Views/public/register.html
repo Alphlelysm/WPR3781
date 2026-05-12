@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AETicketHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html">
+            <img src="AE logo.png.png" alt="AETicketHub Logo" class="nav-logo">
+        </a>
+        <ul class="nav-links"></ul>
+    </nav>
+
+    <!-- AUTH WRAPPER (THIS FIXES YOUR BLANK PAGE ISSUE) -->
+    <div class="container auth-wrapper">
+
+        <div>
+
+            <h2>Customer Register</h2>
+
+           <form id="regForm">
+
+    <h2>Customer Register</h2>
+
+    <label>Full Name</label>
+    <input type="text" id="regFullName" required>
+
+    <label>Email</label>
+    <input type="email" id="regEmail" required>
+
+    <label>ID Number</label>
+    <input type="text" id="regIdNumber" required>
+
+    <label>Phone Number</label>
+    <input type="tel" id="regPhone" required>
+
+    <label>Password</label>
+    <input type="password" id="regPass" required>
+
+    <button type="submit">Register</button>
+
+    <p class="auth-link">
+        Already have an account?
+        <a href="/login">Login here</a>
+    </p>
+
+    <span id="regMsg" class="error"></span>
+
+</form>
+
+        </div>
+
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
