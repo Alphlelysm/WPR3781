@@ -1,21 +1,17 @@
-const isAdmin =
-    (req, res, next) => {
+// Middleware/RoleMiddleware.js
 
-        if (
-            req.session.user.role
-            !== "admin"
-        ) {
+const isAdmin = (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: "Please login first" });
+    }
 
-            return res.status(403)
-                .send(
-                    "Access denied"
-                );
+    if (req.user.role !== "admin") {
+        return res.status(403).json({ 
+            message: "Access denied. Admin only." 
+        });
+    }
 
-        }
-
-        next();
-
+    next();
 };
 
-module.exports =
-    isAdmin;
+module.exports = isAdmin;

@@ -11,7 +11,7 @@ router.post(
 );
 
 router.post(
-    "/login",
+    "/Views/public/login",
     authController.loginUser
 );
 

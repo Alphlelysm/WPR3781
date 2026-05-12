@@ -1,38 +1,38 @@
+require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const path = require("path");
+const connectDB = require("./config/db");
 
 const app = express();
+
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend files
-app.use(express.static(path.join(__dirname, "Views/public")));
-
-// Routes
-app.use("/api/auth", require("./routes/AuthRoutes"));
-app.use("/api/admin", require("./routes/AdminRoutes"));
-app.use("/api/events", require("./routes/EventRoutes"));
-app.use("/api/bookings", require("./routes/BookingRoutes"));
-app.use("/api/enquiry", require("./routes/EnquiryRoutes"));
-
-
-// ✅ ENTRY POINT (LOGIN PAGE)
+// ROOT ROUTE
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "Views/public/login.html"));
+    const filePath = path.join(__dirname, "Views", "public", "login.html");
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error("Error sending login.html:", err);
+            res.status(404).send("Login page not found");
+        }
+    });
 });
 
+// Static files
+app.use(express.static(path.join(__dirname, "Views", "public"), { index: false }));
 
-// MongoDB
-mongoose.connect("mongodb://localhost:27017/WPR3781")
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.log(err));
+// API Routes
+app.use("/api/auth", require("./routes/AuthRoutes"));
+app.use("/api/admin", require("./routes/AdminRoutes"));
+// ... other routes
 
-
-// Start server
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+// Connect to Database + Start Server
+connectDB().then(() => {
+    const PORT = 5000;
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
 });
