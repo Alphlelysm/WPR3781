@@ -1,7 +1,7 @@
 {
   "name": "wpr3781",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000W\u0000P\u0000R\u00003\u00007\u00008\u00001\u0000\r\u0000 \u0000",
+  "description": "Smart Event Management and Ticketing Platform for Advanced Events (Pty) Ltd.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
