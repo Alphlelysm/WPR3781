@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
         const { name, email, password } = req.body;
 
         // check duplicate email (IMPORTANT: Email with capital E)
-        const existingUser = await User.findOne({ Email: email });
+        const existingUser = await User.findOne({ email });
 
         if (existingUser) {
             return res.status(400).send("Email already exists");
@@ -25,10 +25,10 @@ const registerUser = async (req, res) => {
 
         // SAVE USER (MATCH SCHEMA EXACTLY)
         const newUser = await User.create({
-            Name: name,
-            Email: email,
-            Password: hashedPassword,
-            Role: "User"
+             name,
+             email,
+            password: hashedPassword,
+            role: "user"
         });
 
         console.log("USER SAVED:", newUser);
@@ -51,13 +51,13 @@ const loginUser = async (req, res) => {
         const { email, password } = req.body;
 
     
-        const user = await User.findOne({ Email: email });
+        const user = await User.findOne({  email });
 
         if (!user) {
             return res.status(404).send("User not found");
         }
 
-        const isMatch = await bcrypt.compare(password, user.Password);
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(400).send("Invalid credentials");
@@ -66,8 +66,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign(
             {
                 id: user._id,
-                email: user.Email,
-                role: user.Role
+                role: user.role
             },
             process.env.JWT_SECRET || "secret123",
             { expiresIn: "1h" }

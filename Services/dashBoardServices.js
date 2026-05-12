@@ -1,7 +1,7 @@
 const Booking = require("../Models/Bookings");
 const Event = require("../Models/Events");
 
-const getDashboardStats = async () => {
+const getdashBoardStats = async () => {
 
     const totalBookings = await Booking.countDocuments();
 
