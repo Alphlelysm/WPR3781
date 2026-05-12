@@ -4,8 +4,10 @@
   "description": "��#\u0000 \u0000W\u0000P\u0000R\u00003\u00007\u00008\u00001\u0000\r\u0000 \u0000",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js",
+    "test": "node --check server.js"
   },
   "keywords": [],
   "author": "",
