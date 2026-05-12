@@ -70,12 +70,7 @@ if (loginForm) {
 
             localStorage.setItem("token", data.token);
 
-            // ROLE REDIRECT (IMPORTANT)
-            if (data.role === "admin") {
-                window.location.href = "/admin.html";
-            } else {
-                window.location.href = "/events.html";
-            }
+            window.location.href = "/dashboard.html";
 
         } catch (err) {
             document.getElementById("loginMsg").innerText = "Server error";
