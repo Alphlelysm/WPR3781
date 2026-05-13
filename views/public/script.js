@@ -89,23 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const idNumber = document.getElementById("regIdNumber").value;
         const phone = document.getElementById("regPhone").value;
         const password = document.getElementById("regPass").value;
-        const name = document.getElementById("regFullName").value;
-        const email = document.getElementById("regEmail").value;
-        const idNumber = document.getElementById("regIdNumber").value;
-        const phone = document.getElementById("regPhone").value;
-        const password = document.getElementById("regPass").value;
 
         try {
             await apiFetch("/api/auth/register", {
-            await apiFetch("/api/auth/register", {
                 method: "POST",
-                body: JSON.stringify({
-                    name,
-                    email,
-                    idNumber,
-                    phone,
-                    password
-                })
                 body: JSON.stringify({
                     name,
                     email,
@@ -119,12 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "/login";
         } catch (err) {
             alert(err.message || "Unable to register. Please try again.");
-            alert(err.message || "Unable to register. Please try again.");
         }
     });
 });
 
-// AUTH: LOGIN
 // AUTH: LOGIN
 // =====================
 const loginForm = document.getElementById("loginForm");
@@ -138,15 +123,12 @@ if (loginForm) {
 
         try {
             await apiFetch("/api/auth/login", {
-            await apiFetch("/api/auth/login", {
                 method: "POST",
                 body: JSON.stringify({ email, password })
             });
 
             window.location.href = "/dashboard";
-            window.location.href = "/dashboard";
         } catch (err) {
-            showMessage(document.getElementById("loginMsg"), err.message || "Login failed");
             showMessage(document.getElementById("loginMsg"), err.message || "Login failed");
         }
     });
@@ -159,11 +141,7 @@ function updateNavbar() {
     if (!navLinks) return;
 
     if (getToken()) {
-    if (getToken()) {
         navLinks.innerHTML = `
-            <li><a href="/">Home</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/contact">Contact</a></li>
             <li><a href="/">Home</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/contact">Contact</a></li>
@@ -173,14 +151,9 @@ function updateNavbar() {
         document.getElementById("logoutBtn").addEventListener("click", () => {
             document.cookie = "token=; Max-Age=0; path=/";
             window.location.href = "/login";
-            document.cookie = "token=; Max-Age=0; path=/";
-            window.location.href = "/login";
         });
     } else {
         navLinks.innerHTML = `
-            <li><a href="/">Home</a></li>
-            <li><a href="/login">Login/Register</a></li>
-            <li><a href="/contact">Contact</a></li>
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login/Register</a></li>
             <li><a href="/contact">Contact</a></li>
@@ -191,30 +164,19 @@ function updateNavbar() {
 updateNavbar();
 
 // DASHBOARD
-// DASHBOARD
 // =====================
 if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
-    const token = getToken();
-    const currentUser = getCurrentUser();
     const token = getToken();
     const currentUser = getCurrentUser();
 
     if (!token) {
         window.location.href = "/login";
-        window.location.href = "/login";
     }
 
     const welcomeText = document.getElementById("welcomeText");
     if (welcomeText) welcomeText.innerText = "Dashboard";
-    const welcomeText = document.getElementById("welcomeText");
-    if (welcomeText) welcomeText.innerText = "Dashboard";
 
     const userSection = document.getElementById("userSection");
-    const adminSection = document.getElementById("adminSection");
-
-    const loadUserBookings = async () => {
-        const ticketList = document.getElementById("myTicketsList");
-        if (!userSection || !ticketList) return;
     const adminSection = document.getElementById("adminSection");
 
     const loadUserBookings = async () => {
@@ -233,9 +195,9 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
 
                     return `
                         <div class="card">
-                            <h3>${event.title || "Event"}</h3>
+                            <h3>${escapeHtml(event.title || "Event")}</h3>
                             <p>Date: ${formatDate(event.date)}</p>
-                            <p>Venue: ${event.venue || "Venue not set"}</p>
+                            <p>Venue: ${escapeHtml(event.venue || "Venue not set")}</p>
                             <p>Tickets: ${booking.quantity}</p>
                             <p>Total: R${booking.totalPrice}</p>
                         </div>
@@ -243,7 +205,7 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                 }).join("")
                 : "<p>No bookings yet.</p>";
         } catch (err) {
-            ticketList.innerHTML = `<p class="error">${err.message}</p>`;
+            ticketList.innerHTML = `<p class="error">${escapeHtml(err.message)}</p>`;
         }
     };
 
@@ -268,12 +230,12 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
             const adminEventsList = document.getElementById("adminEventsList");
             const adminEnquiriesList = document.getElementById("adminEnquiriesList");
 
-            if (totalEvents) totalEvents.innerText = dashboardStats.totalEvents || events.length;
+            if (totalEvents) totalEvents.innerText = dashboardStats.totalEvents || stats.totalEvents || events.length;
             if (totalBookings) totalBookings.innerText = stats.totalBookings || dashboardStats.totalBookings || 0;
             if (totalRevenue) totalRevenue.innerText = `R${stats.totalRevenue || dashboardStats.totalRevenue || 0}`;
 
             if (popularEventsList) {
-                const popularEvents = dashboardStats.popularEvents || [];
+                const popularEvents = dashboardStats.popularEvents || stats.popularEvents || [];
                 popularEventsList.innerHTML = popularEvents.length
                     ? popularEvents.map((event) => `
                         <div class="dash-box">
@@ -285,12 +247,12 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
             }
 
             if (capacityUsageList) {
-                const capacityStats = stats.capacityStats || dashboardStats.capacityUsage || [];
+                const capacityStats = stats.capacityStats || dashboardStats.capacityUsage || stats.capacityUsage || [];
                 capacityUsageList.innerHTML = capacityStats.length
                     ? capacityStats.map((event) => `
                         <div class="dash-box">
                             <strong>${escapeHtml(event.title || "Untitled event")}</strong>
-                            <p style="margin: 6px 0 0 0;">${event.bookedSeats || 0}/${event.capacity || 0} booked (${Math.round(event.usage || 0)}%)</p>
+                            <p style="margin: 6px 0 0 0;">${event.bookedSeats || 0}/${event.capacity || 0} booked (${Math.round(event.usage || event.usagePercentage || 0)}%)</p>
                         </div>
                     `).join("")
                     : "<p>No capacity data yet.</p>";
@@ -399,7 +361,7 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                 });
             }
         } catch (err) {
-            adminSection.innerHTML += `<p class="error">${err.message}</p>`;
+            adminSection.innerHTML += `<p class="error">${escapeHtml(err.message)}</p>`;
         }
     };
 
@@ -442,7 +404,6 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
 // =====================
 if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
     const loadEvents = async () => {
-    const loadEvents = async () => {
         const grid = document.getElementById("eventGrid");
         if (!grid) return;
 
@@ -464,9 +425,9 @@ if (window.location.pathname.includes("index.html") || window.location.pathname 
 
                     return `
                         <div class="card">
-                            <h3>${event.title}</h3>
+                            <h3>${escapeHtml(event.title)}</h3>
                             <p>Date: ${formatDate(event.date)}</p>
-                            <p>Venue: ${event.venue}</p>
+                            <p>Venue: ${escapeHtml(event.venue)}</p>
                             <p>${ticketsLeft > 0 ? `${ticketsLeft} tickets left` : "<strong style='color:red;'>SOLD OUT</strong>"}</p>
                             <button onclick="window.location.href='/event?id=${event._id}'">View Details</button>
                         </div>
@@ -474,38 +435,7 @@ if (window.location.pathname.includes("index.html") || window.location.pathname 
                 }).join("")
                 : "<p>No events found.</p>";
         } catch (err) {
-            grid.innerHTML = `<p class="error">${err.message}</p>`;
-        }
-    };
-        const searchText = document.getElementById("searchInput")?.value || "";
-        const category = document.getElementById("categoryFilter")?.value || "all";
-        const params = new URLSearchParams();
-
-        if (searchText) params.set("search", searchText);
-        if (category !== "all") params.set("category", category);
-
-        grid.innerHTML = "<p>Loading events...</p>";
-
-        try {
-            const events = await apiFetch(`/api/events${params.toString() ? `?${params}` : ""}`);
-
-            grid.innerHTML = events.length
-                ? events.map((event) => {
-                    const ticketsLeft = (event.capacity || 0) - (event.bookedSeats || 0);
-
-                    return `
-                        <div class="card">
-                            <h3>${event.title}</h3>
-                            <p>Date: ${formatDate(event.date)}</p>
-                            <p>Venue: ${event.venue}</p>
-                            <p>${ticketsLeft > 0 ? `${ticketsLeft} tickets left` : "<strong style='color:red;'>SOLD OUT</strong>"}</p>
-                            <button onclick="window.location.href='/event?id=${event._id}'">View Details</button>
-                        </div>
-                    `;
-                }).join("")
-                : "<p>No events found.</p>";
-        } catch (err) {
-            grid.innerHTML = `<p class="error">${err.message}</p>`;
+            grid.innerHTML = `<p class="error">${escapeHtml(err.message)}</p>`;
         }
     };
 
@@ -514,16 +444,13 @@ if (window.location.pathname.includes("index.html") || window.location.pathname 
     const searchBtn = document.getElementById("searchBtn");
     if (searchBtn) {
         searchBtn.addEventListener("click", loadEvents);
-        searchBtn.addEventListener("click", loadEvents);
     }
 }
 
 // EVENT DETAILS + BOOKING
 // =====================
 if (["/event", "/event.html"].includes(window.location.pathname)) {
-if (["/event", "/event.html"].includes(window.location.pathname)) {
     const params = new URLSearchParams(window.location.search);
-    const eventId = params.get("id");
     const eventId = params.get("id");
 
     const title = document.getElementById("evTitle");
@@ -560,67 +487,20 @@ if (["/event", "/event.html"].includes(window.location.pathname)) {
     loadEventDetails().then((event) => {
         currentEvent = event;
     });
-    const loadEventDetails = async () => {
-        if (!eventId) {
-            showMessage(title, "Event not found");
-            return null;
-        }
-
-        try {
-            const event = await apiFetch(`/api/events/${eventId}`);
-            const available = (event.capacity || 0) - (event.bookedSeats || 0);
-
-            showMessage(title, event.title);
-            showMessage(date, `Date: ${formatDate(event.date)}`);
-            showMessage(venue, `Venue: ${event.venue}`);
-            showMessage(tickets, available > 0 ? `${available} tickets available` : "Sold out");
-
-            return event;
-        } catch (err) {
-            showMessage(title, "Event not found");
-            showMessage(message, err.message);
-            return null;
-        }
-    };
-
-    let currentEvent;
-    loadEventDetails().then((event) => {
-        currentEvent = event;
-    });
 
     if (bookButton) {
-        bookButton.addEventListener("click", async () => {
-            if (!getToken()) {
-                window.location.href = "/login";
         bookButton.addEventListener("click", async () => {
             if (!getToken()) {
                 window.location.href = "/login";
                 return;
             }
 
-            if (!currentEvent) {
-                showMessage(message, "Event not found");
             if (!currentEvent) {
                 showMessage(message, "Event not found");
                 return;
             }
 
             const quantity = Number(document.getElementById("ticketQty").value);
-
-            try {
-                await apiFetch("/api/bookings", {
-                    method: "POST",
-                    body: JSON.stringify({
-                        eventId: currentEvent._id,
-                        quantity
-                    })
-                });
-
-                window.location.href = "/dashboard";
-            } catch (err) {
-                showMessage(message, err.message);
-                currentEvent = await loadEventDetails();
-            }
 
             try {
                 await apiFetch("/api/bookings", {
@@ -646,7 +526,6 @@ const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
     contactForm.addEventListener("submit", async (e) => {
-    contactForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const success = document.getElementById("contactSuccess");
@@ -660,34 +539,12 @@ if (contactForm) {
                     message: document.getElementById("cMsg").value
                 })
             });
-        const success = document.getElementById("contactSuccess");
-
-        try {
-            await apiFetch("/api/enquiries/submit", {
-                method: "POST",
-                body: JSON.stringify({
-                    name: document.getElementById("cName").value,
-                    email: document.getElementById("cEmail").value,
-                    message: document.getElementById("cMsg").value
-                })
-            });
 
             if (success) {
                 success.classList.remove("hidden");
                 success.innerText = "Your support ticket has been logged successfully.";
             }
-            if (success) {
-                success.classList.remove("hidden");
-                success.innerText = "Your support ticket has been logged successfully.";
-            }
 
-            contactForm.reset();
-        } catch (err) {
-            if (success) {
-                success.classList.remove("hidden");
-                success.innerText = err.message;
-            }
-        }
             contactForm.reset();
         } catch (err) {
             if (success) {
