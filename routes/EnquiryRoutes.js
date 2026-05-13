@@ -9,12 +9,10 @@ const isAuthenticated =
 
 
 
-router.get("/", enquiryController.getAllEnquiries)    
+router.get("/", isAuthenticated, enquiryController.getAllEnquiries)
 // Submit enquiry
 router.post(
     "/submit",
-
-    isAuthenticated,
 
     enquiryController.submitEnquiry
 );
