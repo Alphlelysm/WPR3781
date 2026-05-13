@@ -61,10 +61,13 @@ if (loginForm) {
                 body: JSON.stringify({ email, password })
             });
 
-            const data = await res.json();
+            const contentType = res.headers.get("content-type") || "";
+            const data = contentType.includes("application/json")
+                ? await res.json()
+                : { message: await res.text() };
 
             if (!res.ok) {
-                document.getElementById("loginMsg").innerText = data.message;
+                document.getElementById("loginMsg").innerText = data.message || "Login failed";
                 return;
             }
 
@@ -73,7 +76,7 @@ if (loginForm) {
             window.location.href = "/dashboard.html";
 
         } catch (err) {
-            document.getElementById("loginMsg").innerText = "Server error";
+            document.getElementById("loginMsg").innerText = "Unable to log in. Please try again.";
         }
     });
 }
@@ -113,7 +116,7 @@ updateNavbar();
 
 // DASHBOARD SECURITY
 // =====================
-if (window.location.pathname.includes("dashboard.html")) {
+if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
     const token = localStorage.getItem("token");
 
     if (!token) {
