@@ -34,7 +34,7 @@ contact enquiry management.
 
 | Student            | Student Number | Role                                                 |
 | ------------------ | -------------- | ---------------------------------------------------- |
-| Ethan Ogle         | 602114         | Presentation, assignment alignment, final QA         |
+| Ethan Ogle         | 602114         | Debugging, assignment alignment, final QA            |
 | Jaden Van der Lely | 600690         | GitHub repository, authentication, security          |
 | Aphiwe Shabalala   | 602517         | MongoDB, Mongoose models, database integration       |
 | Nokwanda Legoabe   | 578051         | Frontend, EJS pages, routing UI                      |
@@ -43,14 +43,14 @@ contact enquiry management.
 ## Setup Instructions
 
 1. Install Node.js.
-2. Install and start MongoDB locally, or configure a MongoDB Atlas connection.
+2. Install MongoDB Community Edition from https://www.mongodb.com/products/self-managed/community-edition and start MongoDB locally.
 3. Install project dependencies:
 
 ```bash
 npm install
 ```
 
-4. Create a `.env` file in the project root:
+4. Rename `.env.example` to `.env`, then update the values:
 
 ```env
 JWT_SECRET=replace-this-with-a-secure-secret
@@ -62,7 +62,7 @@ JWT_SECRET=replace-this-with-a-secure-secret
 npm start
 ```
 
-1. Open the application:
+6. Open the application:
 
 ```text
 http://localhost:5000
