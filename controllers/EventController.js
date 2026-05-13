@@ -1,132 +1,149 @@
-const Event = require("../models/Events");
+const Event = require("../models/Events")
 
-const normalizeEventInput = (body) => ({
-    title: body.title ?? body.Title,
-    description: body.description ?? body.Description,
-    category: body.category ?? body.Category,
-    date: body.date ?? body.Date,
-    venue: body.venue ?? body.Venue ?? body.Vanue,
-    price: body.price ?? body.Price,
-    capacity: body.capacity ?? body.Capacity,
-    bookedSeats: body.bookedSeats ?? body.BookedSeats,
-    status: body.status ?? body.Status
-});
+const buildEventFilter = (query) => {
+  const { search, keyword, category, date, availability, status } = query
+  const filter = {}
+  const searchText = search || keyword
 
+  if (searchText) {
+    filter.$or = [
+      { title: { $regex: searchText, $options: "i" } },
+      { venue: { $regex: searchText, $options: "i" } },
+      { category: { $regex: searchText, $options: "i" } },
+    ]
+  }
 
-// Create event
-const createEvent = async (req, res) =>
- { 
-    try 
-    { 
-        await Event.create(normalizeEventInput(req.body)); 
-        res.redirect("/events"); 
-    } 
-    catch (error) 
-    { 
-        res.status(500) .send(error.message); 
-    } 
-};
+  if (category && category !== "all") {
+    filter.category = category
+  }
 
+  if (date) {
+    const selectedDate = new Date(date)
 
+    if (!Number.isNaN(selectedDate.getTime())) {
+      filter.date = { $gte: selectedDate }
+    }
+  }
 
-// Get all events
-const getEvents = async (req, res) => {
+  if (status && status !== "all") {
+    filter.status = status
+  }
 
-    try {
+  if (availability === "available") {
+    filter.$expr = { $lt: ["$bookedSeats", "$capacity"] }
+  }
 
-        const events =
-            await Event.find();
+  return filter
+}
 
-        res.render(
-            "events/index",
-            { events }
-        );
+const getAllEvents = async (req, res) => {
+  try {
+    const events = await Event.find(buildEventFilter(req.query)).sort({ date: 1 })
+    return res.json(events)
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error loading events",
+      error: error.message,
+    })
+  }
+}
 
-    } catch (error) {
+const searchEvents = getAllEvents
 
-        res.status(500)
-            .send(error.message);
+const getEventDetails = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id)
 
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" })
     }
 
-};
+    return res.json(event)
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error loading event",
+      error: error.message,
+    })
+  }
+}
 
-// Delete event
+const createEvent = async (req, res) => {
+  try {
+    const {
+      title,
+      category,
+      date,
+      venue,
+      price,
+      capacity,
+      bookedSeats,
+      status,
+      description,
+    } = req.body
+
+    const event = await Event.create({
+      title,
+      description,
+      category,
+      date,
+      venue,
+      price: Number(price) || 0,
+      capacity: Number(capacity),
+      bookedSeats: Number(bookedSeats) || 0,
+      status: status || "available",
+    })
+
+    return res.status(201).json(event)
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error creating event",
+      error: error.message,
+    })
+  }
+}
+
+const updateEvent = async (req, res) => {
+  try {
+    const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    })
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" })
+    }
+
+    return res.json(event)
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error updating event",
+      error: error.message,
+    })
+  }
+}
+
 const deleteEvent = async (req, res) => {
+  try {
+    const event = await Event.findByIdAndDelete(req.params.id)
 
-    try {
-
-        await Event.findByIdAndDelete(
-            req.params.id
-        );
-
-        res.redirect("/events");
-
-    } catch (error) {
-
-        res.status(500)
-            .send(error.message);
-
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" })
     }
 
-};
-
-const updateEvent = async (req, res) => 
-{
-
-        try 
-        {
-
-            const eventId =  req.params.id;
-
-            const updatedEvent = await Event.findByIdAndUpdate
-            (
-
-                eventId, normalizeEventInput(req.body),
-                {
-                    new: true,
-                    runValidators: true
-                }
-
-            );
-
-
-            if (!updatedEvent) 
-            {
-
-                return res
-                    .status(404)
-                    .send
-                    (
-                        "Event not found"
-                    );
-
-            }
-
-
-            res.redirect(
-                "/events"
-            );
-
-        } 
-        catch (error) 
-        {
-
-            res.status(500)
-                .send
-                (
-                    error.message
-                );
-
-        }      
-
-};
-
-
+    return res.json({ message: "Event deleted successfully" })
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error deleting event",
+      error: error.message,
+    })
+  }
+}
 
 module.exports = {
-    createEvent,
-    getEvents,
-     updateEvent,
-    deleteEvent
-};
+  getAllEvents,
+  searchEvents,
+  getEventDetails,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+}
