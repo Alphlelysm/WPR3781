@@ -74,6 +74,17 @@ http://localhost:5000
 
 The current database connection is configured in `config/db.js`.
 
+## Demo Admin Login
+
+The server creates a predefined admin account on startup:
+
+```text
+Email: admin@aetickethub.local
+Password: Admin123!
+```
+
+Use this account on `/login` to access the admin dashboard.
+
 ## JWT Command Notes
 
 Generate a strong JWT secret for the `.env` file:

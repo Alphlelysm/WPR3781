@@ -2,6 +2,7 @@ require("dotenv").config()
 const express = require("express")
 const path = require("path")
 const connectDB = require("./config/db")
+const { seedAdmin } = require("./config/seedAdmin")
 const errorHandler = require("./middleware/ErrorMiddleware")
 
 const app = express()
@@ -76,7 +77,9 @@ app.use("/api/enquiries", require("./routes/EnquiryRoutes"))
 app.use(errorHandler)
 
 // Connect to Database + Start Server
-connectDB().then(() => {
+connectDB().then(async () => {
+  await seedAdmin()
+
   const PORT = 5000
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`)
