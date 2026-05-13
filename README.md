@@ -6,6 +6,10 @@ AETicketHub is a Node.js and Express web application for event discovery,
 secure authentication, ticket booking, admin event management, dashboards, and
 contact enquiry management.
 
+----
+
+![Home event listing](docs/screenshots/home-events.png)
+
 ## Features
 
 - Event listings with search and filtering.

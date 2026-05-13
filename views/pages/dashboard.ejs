@@ -8,14 +8,16 @@
 </head>
 <body>
     <nav>
-        <a href="index.html">
+        <a href="/">
             <img src="AE logo.png.png" alt="AETicketHub Logo" class="nav-logo">
         </a>
         <ul class="nav-links"></ul>
     </nav>
 
     <div class="container">
-        <h2 id="welcomeText" style="color: var(--main-blue);">Dashboard</h2>
+        <div class="dashboard-header">
+            <h2 id="welcomeText" class="page-title">Dashboard</h2>
+        </div>
 
         <!-- standard user dashboard -->
         <div id="userSection" class="hidden">
@@ -26,34 +28,34 @@
         <!-- admin dashboard -->
         <div id="adminSection" class="hidden">
             
-            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
-                <div style="flex: 1; min-width: 200px; background: var(--main-blue); color: white; padding: 20px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0;">Total Active Events</h4>
-                    <h2 id="totalEventsStat" style="margin: 0;">0</h2>
+            <div class="stats-grid">
+                <div class="stat-card feature">
+                    <h4>Total Active Events</h4>
+                    <h2 id="totalEventsStat">0</h2>
                 </div>
-                <div style="flex: 1; min-width: 200px; background: var(--main-red); color: white; padding: 20px; border-radius: 8px;">
-                    <h4 style="margin: 0 0 10px 0;">Total Tickets Sold</h4>
-                    <h2 id="totalBookingsStat" style="margin: 0;">0</h2>
+                <div class="stat-card alert">
+                    <h4>Total Tickets Sold</h4>
+                    <h2 id="totalBookingsStat">0</h2>
                 </div>
-                <div style="flex: 1; min-width: 200px; background: white; color: #333; padding: 20px; border-radius: 8px; border-left: 5px solid var(--main-blue);">
-                    <h4 style="margin: 0 0 10px 0;">Total Revenue</h4>
-                    <h2 id="totalRevenueStat" style="margin: 0;">R0</h2>
+                <div class="stat-card">
+                    <h4>Total Revenue</h4>
+                    <h2 id="totalRevenueStat">R0</h2>
                 </div>
             </div>
 
-            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 25px;">
-                <div class="card" style="box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+            <div class="admin-grid">
+                <div class="card">
                     <h3>Popular Events</h3>
                     <div id="popularEventsList"></div>
                 </div>
-                <div class="card" style="box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+                <div class="card">
                     <h3>Capacity Usage</h3>
                     <div id="capacityUsageList"></div>
                 </div>
             </div>
 
-            <div style="background:white; padding:25px; margin-bottom:25px; border-radius:8px; border-left: 5px solid var(--main-red); box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0;">Add New Event</h3>
+            <div class="panel admin-form-panel">
+                <h3>Add New Event</h3>
                 <form id="createEventForm">
                     <input type="text" id="newEvName" placeholder="Event Name" required>
                     <input type="date" id="newEvDate" required>

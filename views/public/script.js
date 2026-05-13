@@ -145,7 +145,7 @@ function updateNavbar() {
             <li><a href="/">Home</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/contact">Contact</a></li>
-            <li><a href="#" id="logoutBtn">Logout</a></li>
+            <li><a href="#" id="logoutBtn" class="nav-auth-link">Logout</a></li>
         `;
 
         document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -155,8 +155,8 @@ function updateNavbar() {
     } else {
         navLinks.innerHTML = `
             <li><a href="/">Home</a></li>
-            <li><a href="/login">Login/Register</a></li>
             <li><a href="/contact">Contact</a></li>
+            <li><a href="/login" class="nav-auth-link">Login/Register</a></li>
         `;
     }
 }
@@ -194,7 +194,7 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                     const event = booking.event || {};
 
                     return `
-                        <div class="card">
+                        <div class="card event-card">
                             <h3>${escapeHtml(event.title || "Event")}</h3>
                             <p>Date: ${formatDate(event.date)}</p>
                             <p>Venue: ${escapeHtml(event.venue || "Venue not set")}</p>
@@ -240,7 +240,7 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                     ? popularEvents.map((event) => `
                         <div class="dash-box">
                             <strong>${escapeHtml(event.title || "Untitled event")}</strong>
-                            <p style="margin: 6px 0 0 0;">${event.ticketsSold || 0} tickets sold</p>
+                            <p class="list-note">${event.ticketsSold || 0} tickets sold</p>
                         </div>
                     `).join("")
                     : "<p>No ticket sales yet.</p>";
@@ -252,7 +252,7 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                     ? capacityStats.map((event) => `
                         <div class="dash-box">
                             <strong>${escapeHtml(event.title || "Untitled event")}</strong>
-                            <p style="margin: 6px 0 0 0;">${event.bookedSeats || 0}/${event.capacity || 0} booked (${Math.round(event.usage || event.usagePercentage || 0)}%)</p>
+                            <p class="list-note">${event.bookedSeats || 0}/${event.capacity || 0} booked (${Math.round(event.usage || event.usagePercentage || 0)}%)</p>
                         </div>
                     `).join("")
                     : "<p>No capacity data yet.</p>";
@@ -279,9 +279,9 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                                     <option value="sold-out" ${event.status === "sold-out" ? "selected" : ""}>Sold out</option>
                                 </select>
                                 <p>${event.bookedSeats || 0}/${event.capacity || 0} booked</p>
-                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                    <button type="submit" style="width:auto;">Update</button>
-                                    <button type="button" data-delete-event="${event._id}" style="width:auto;">Delete</button>
+                                <div class="button-row">
+                                    <button type="submit">Update</button>
+                                    <button type="button" data-delete-event="${event._id}">Delete</button>
                                 </div>
                             </form>
                         </div>
@@ -333,9 +333,9 @@ if (["/dashboard", "/dashboard.html"].includes(window.location.pathname)) {
                                 <p>${userLine}</p>
                                 <p>${escapeHtml(enquiry.message)}</p>
                                 <p>${enquiry.resolved ? "Resolved" : "Open"} - ${formatDate(enquiry.createdAt)}</p>
-                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                    ${enquiry.resolved ? "" : `<button data-resolve-enquiry="${enquiry._id}" style="width:auto;">Resolve</button>`}
-                                    <button data-delete-enquiry="${enquiry._id}" style="width:auto;">Delete</button>
+                                <div class="button-row">
+                                    ${enquiry.resolved ? "" : `<button data-resolve-enquiry="${enquiry._id}">Resolve</button>`}
+                                    <button data-delete-enquiry="${enquiry._id}">Delete</button>
                                 </div>
                             </div>
                         `;
@@ -424,11 +424,11 @@ if (window.location.pathname.includes("index.html") || window.location.pathname 
                     const ticketsLeft = (event.capacity || 0) - (event.bookedSeats || 0);
 
                     return `
-                        <div class="card">
+                        <div class="card event-card">
                             <h3>${escapeHtml(event.title)}</h3>
                             <p>Date: ${formatDate(event.date)}</p>
                             <p>Venue: ${escapeHtml(event.venue)}</p>
-                            <p>${ticketsLeft > 0 ? `${ticketsLeft} tickets left` : "<strong style='color:red;'>SOLD OUT</strong>"}</p>
+                            <p class="ticket-status">${ticketsLeft > 0 ? `${ticketsLeft} tickets left` : "SOLD OUT"}</p>
                             <button onclick="window.location.href='/event?id=${event._id}'">View Details</button>
                         </div>
                     `;
