@@ -2,41 +2,41 @@ const mongoose = require("mongoose");
 
 const EventSchema = new mongoose.Schema
 ({
-    Title:
+    title:
     {
         type: String,
         required: true
     },
-    Description: String,
+    description: String,
     
-    Category:
+    category:
     {
         type: String,
         required: true
     },
-    Date:{
+    date:{
         type: Date,
         required:true
     },
-    Vanue:{
+    venue:{
         type: String,
         required: true
     },
-    Price:{
+    price:{
         type: Number,
         required: true,
         min: 0
     },
-    Capacity:{
+    capacity:{
         type: Number,
         required: true,
         min:1
     },
-    BookedSeats:{
+    bookedSeats:{
         type: Number,
         default:0
     },
-    Status:{
+    status:{
         type: String,
         enum: ["available","sold-out"],
         default:"available"
@@ -44,7 +44,7 @@ const EventSchema = new mongoose.Schema
 },{timestamps:true});
 
 EventSchema.index({
-    Category:1,
-    Date:1
+    category:1,
+    date:1
 });
 module.exports = mongoose.models.Event || mongoose.model("Event", EventSchema);

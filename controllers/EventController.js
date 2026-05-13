@@ -1,12 +1,24 @@
 const Event = require("../models/Events");
 
+const normalizeEventInput = (body) => ({
+    title: body.title ?? body.Title,
+    description: body.description ?? body.Description,
+    category: body.category ?? body.Category,
+    date: body.date ?? body.Date,
+    venue: body.venue ?? body.Venue ?? body.Vanue,
+    price: body.price ?? body.Price,
+    capacity: body.capacity ?? body.Capacity,
+    bookedSeats: body.bookedSeats ?? body.BookedSeats,
+    status: body.status ?? body.Status
+});
+
 
 // Create event
 const createEvent = async (req, res) =>
  { 
     try 
     { 
-        await Event.create(req.body); 
+        await Event.create(normalizeEventInput(req.body)); 
         res.redirect("/events"); 
     } 
     catch (error) 
@@ -70,7 +82,7 @@ const updateEvent = async (req, res) =>
             const updatedEvent = await Event.findByIdAndUpdate
             (
 
-                eventId, req.body,
+                eventId, normalizeEventInput(req.body),
                 {
                     new: true,
                     runValidators: true
