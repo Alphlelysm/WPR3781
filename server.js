@@ -2,6 +2,7 @@ require("dotenv").config()
 const express = require("express")
 const path = require("path")
 const connectDB = require("./config/db")
+const errorHandler = require("./middleware/ErrorMiddleware")
 
 const app = express()
 
@@ -71,6 +72,8 @@ app.use("/api/admin", require("./routes/AdminRoutes"))
 app.use("/api/events", require("./routes/EventRoutes"))
 app.use("/api/bookings", require("./routes/BookingRoutes"))
 app.use("/api/enquiries", require("./routes/EnquiryRoutes"))
+
+app.use(errorHandler)
 
 // Connect to Database + Start Server
 connectDB().then(() => {
