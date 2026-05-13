@@ -2,7 +2,7 @@ const Enquiry = require("../models/Enquiry")
 
 const submitEnquiry = async (req, res) => {
   try {
-    const userId = req.user?.id || req.user?._id || req.session?.user?._id || req.body.userId
+    const userId = req.user?.id || req.user?._id
     const subject = req.body.subject || `Enquiry from ${req.body.name || "website user"}`
     const message = req.body.message
 

@@ -1,5 +1,60 @@
 const Event = require("../models/Events")
 
+const defaultEvents = [
+  {
+    title: "Tech Corp Annual Conference",
+    description: "Corporate conference for technology teams and stakeholders.",
+    category: "corporate",
+    date: "2026-06-15",
+    venue: "CSIR ICC, Pretoria",
+    price: 450,
+    capacity: 800,
+    bookedSeats: 750,
+    status: "available",
+  },
+  {
+    title: "Amapiano Winter Fest",
+    description: "Large-scale winter music festival.",
+    category: "festival",
+    date: "2026-07-02",
+    venue: "SunBet Arena, Pretoria",
+    price: 350,
+    capacity: 5000,
+    bookedSeats: 4998,
+    status: "available",
+  },
+  {
+    title: "Leadership and Agile Workshop",
+    description: "Small-group workshop for leadership and agile delivery.",
+    category: "workshop",
+    date: "2026-05-20",
+    venue: "Sandton Convention Centre",
+    price: 250,
+    capacity: 50,
+    bookedSeats: 20,
+    status: "available",
+  },
+  {
+    title: "Exclusive VIP Gala",
+    description: "Private gala event with limited availability.",
+    category: "private",
+    date: "2026-08-10",
+    venue: "The Saxon Hotel, Johannesburg",
+    price: 900,
+    capacity: 100,
+    bookedSeats: 100,
+    status: "sold-out",
+  },
+]
+
+const ensureDefaultEvents = async () => {
+  const eventCount = await Event.countDocuments()
+
+  if (eventCount === 0) {
+    await Event.insertMany(defaultEvents)
+  }
+}
+
 const buildEventFilter = (query) => {
   const { search, keyword, category, date, availability, status } = query
   const filter = {}
@@ -38,6 +93,8 @@ const buildEventFilter = (query) => {
 
 const getAllEvents = async (req, res) => {
   try {
+    await ensureDefaultEvents()
+
     const events = await Event.find(buildEventFilter(req.query)).sort({ date: 1 })
     return res.json(events)
   } catch (error) {

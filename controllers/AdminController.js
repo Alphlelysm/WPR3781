@@ -10,29 +10,22 @@ const getRecentBookings = async () => {
 
 const getDashboard = async (req, res) => {
   try {
-    const totalBookings = await Booking.countDocuments()
-
-    const revenueData = await Booking.aggregate([
-      {
-        $group: {
-          _id: null,
-          totalRevenue: { $sum: "$totalPrice" },
-        },
-      },
-    ])
-
-    const totalRevenue = revenueData[0]?.totalRevenue || 0
-
     const dashboardStats = await dashboardService.getdashBoardStats()
 
-    res.json({
-      totalBookings,
-      totalRevenue,
+    return res.json({
+      totalBookings: dashboardStats.totalBookings,
+      totalEvents: dashboardStats.totalEvents,
+      totalRevenue: dashboardStats.totalRevenue,
+      popularEvents: dashboardStats.popularEvents,
+      capacityUsage: dashboardStats.capacityUsage,
       capacityStats: dashboardStats.capacityUsage,
       dashboardStats,
     })
   } catch (error) {
-    res.status(500).send(error.message)
+    return res.status(500).json({
+      message: "Error loading dashboard",
+      error: error.message,
+    })
   }
 }
 

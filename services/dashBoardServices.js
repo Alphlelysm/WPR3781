@@ -68,6 +68,18 @@ const getdashBoardStats = async () => {
             0,
           ],
         },
+        usagePercentage: {
+          $cond: [
+            { $gt: ["$capacity", 0] },
+            {
+              $multiply: [
+                { $divide: ["$bookedSeats", "$capacity"] },
+                100,
+              ],
+            },
+            0,
+          ],
+        },
       },
     },
     { $sort: { usage: -1 } },
