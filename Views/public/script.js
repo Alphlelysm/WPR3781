@@ -121,6 +121,24 @@ if (window.location.pathname.includes("dashboard.html")) {
     }
 
     document.getElementById("welcomeText").innerText = "Dashboard";
+
+    const userSection = document.getElementById("userSection");
+    const ticketList = document.getElementById("myTicketsList");
+
+    if (userSection && ticketList) {
+        const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+
+        userSection.classList.remove("hidden");
+        ticketList.innerHTML = bookings.length
+            ? bookings.map((booking) => `
+                <div class="card">
+                    <h3>${booking.name}</h3>
+                    <p>Date: ${booking.date}</p>
+                    <p>Tickets: ${booking.quantity}</p>
+                </div>
+            `).join("")
+            : "<p>No bookings yet.</p>";
+    }
 }
 
 
