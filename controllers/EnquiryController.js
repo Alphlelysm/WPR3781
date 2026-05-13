@@ -1,5 +1,5 @@
 const Enquiry =
-    require("../Models/Enquiry");
+    require("../models/Enquiry");
 
 
 const submitEnquiry =

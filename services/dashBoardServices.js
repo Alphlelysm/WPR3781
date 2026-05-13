@@ -1,5 +1,5 @@
-const Booking = require("../Models/Bookings");
-const Event = require("../Models/Events");
+const Booking = require("../models/Bookings");
+const Event = require("../models/Events");
 
 const getdashBoardStats = async () => {
 

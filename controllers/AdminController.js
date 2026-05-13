@@ -1,5 +1,5 @@
-const Booking = require("../Models/Bookings");
-const dashboardService = require("../Services/dashBoardServices");
+const Booking = require("../models/Bookings");
+const dashboardService = require("../services/dashBoardServices");
 
 // GET RECENT BOOKINGS
 const getRecentBookings = async () => {

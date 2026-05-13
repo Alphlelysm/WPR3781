@@ -2,7 +2,7 @@ const router =
     require("express").Router();
 
 const eventController =
-    require("../Controllers/EventController");
+    require("../controllers/EventController");
 
 
 router.get(

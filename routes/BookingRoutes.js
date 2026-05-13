@@ -2,7 +2,7 @@ const router =
     require("express").Router();
 
 const bookingController =
-    require("../Controllers/BookingsController");
+    require("../controllers/BookingsController");
 
 
 router.post(

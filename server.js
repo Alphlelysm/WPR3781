@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROOT ROUTE
 app.get("/", (req, res) => {
-    const filePath = path.join(__dirname, "Views", "public", "login.html");
+    const filePath = path.join(__dirname, "views", "public", "login.html");
     res.sendFile(filePath, (err) => {
         if (err) {
             console.error("Error sending login.html:", err);
@@ -22,15 +22,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-    res.sendFile(path.join(__dirname, "Views", "public", "register.html"));
+    res.sendFile(path.join(__dirname, "views", "public", "register.html"));
 });
 
 app.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "Views", "public", "login.html"));
+    res.sendFile(path.join(__dirname, "views", "public", "login.html"));
 });
 
 // Static files
-app.use(express.static(path.join(__dirname, "Views", "public"), { index: false }));
+app.use(express.static(path.join(__dirname, "views", "public"), { index: false }));
 
 // API Routes
 app.use("/api/auth", require("./routes/AuthRoutes"));
