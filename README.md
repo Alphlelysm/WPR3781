@@ -17,6 +17,19 @@ contact enquiry management.
 - Contact enquiry submission and management.
 - MongoDB persistence through Mongoose models.
 
+## Technologies Used
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JSON Web Tokens
+- bcrypt password hashing
+- EJS
+- HTML5
+- CSS3
+- JavaScript
+
 ## Team Members and Roles
 
 | Student            | Student Number | Role                                                 |
@@ -85,16 +98,3 @@ JWT_SECRET=paste-generated-secret-here
 10. Show admin analytics.
 11. Submit a contact enquiry.
 12. Show admin enquiry management.
-
-## Technologies Used
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JSON Web Tokens
-- bcrypt password hashing
-- EJS
-- HTML5
-- CSS3
-- JavaScript
