@@ -2,7 +2,7 @@ const router =
     require("express").Router();
 
 const authController =
-    require("../Controllers/AuthController");
+    require("../controllers/AuthController");
 
 
 router.post(
@@ -12,6 +12,11 @@ router.post(
 
 router.post(
     "/login",
+    authController.loginUser
+);
+
+router.post(
+    "/views/public/login",
     authController.loginUser
 );
 

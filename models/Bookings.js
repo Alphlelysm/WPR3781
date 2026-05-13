@@ -1,37 +1,31 @@
-const Mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const BookingSchema = new Mongoose.Schema
-({
+const BookingSchema = new mongoose.Schema({
 
-    User: 
-    {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
 
-    Event: 
-    {
+    event: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Event",
         required: true
     },
 
-    Quantity: 
-    {
+    quantity: {
         type: Number,
         required: true,
         min: 1
     },
 
-    totalPrice: 
-    {
+    totalPrice: {
         type: Number,
         required: true
     },
 
-    Status: 
-    {
+    status: {
         type: String,
         enum: ["confirmed", "cancelled"],
         default: "confirmed"
@@ -39,10 +33,10 @@ const BookingSchema = new Mongoose.Schema
 
 }, { timestamps: true });
 
-BookingSchema.index
-({
+// correct index (must match schema fields exactly)
+BookingSchema.index({
     user: 1,
     event: 1
 });
 
-module.exports = mongoose.model("Booking", BookingSchema);
+module.exports = mongoose.models.Booking || mongoose.model("Booking", BookingSchema);

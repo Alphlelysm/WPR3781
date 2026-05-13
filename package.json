@@ -1,0 +1,32 @@
+{
+  "name": "wpr3781",
+  "version": "1.0.0",
+  "description": "Smart Event Management and Ticketing Platform for Advanced Events (Pty) Ltd.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js",
+    "test": "node --check server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alphlelysm/WPR3781.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Alphlelysm/WPR3781/issues"
+  },
+  "homepage": "https://github.com/Alphlelysm/WPR3781#readme"
+}

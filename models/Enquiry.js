@@ -1,12 +1,13 @@
-const Mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const EnquirySchema = new Mongoose.Schema
+const EnquirySchema = new mongoose.Schema
 ({
 
     user: 
-    {
+   {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: false
     },
 
     subject: 
@@ -29,4 +30,4 @@ const EnquirySchema = new Mongoose.Schema
 
 }, { timestamps: true });
 
-module.exports = Mongoose.model("Enquiry", EnquirySchema);
+module.exports = mongoose.models.Enquiry || mongoose.model("Enquiry", EnquirySchema);

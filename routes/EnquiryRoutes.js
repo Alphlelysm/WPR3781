@@ -2,10 +2,10 @@ const router =
     require("express").Router();
 
 const enquiryController =
-    require("../Controllers/EnquiryController");
+    require("../controllers/EnquiryController");
 
 const isAuthenticated =
-    require("../Middleware/AuthMiddleware");
+    require("../middleware/AuthMiddleware");
 
 
 // Submit enquiry
