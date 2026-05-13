@@ -46,10 +46,11 @@ nav {
 }
 
 .nav-logo {
-  height: 64px;
+  height: 74px;
+  width: auto;
   background: var(--surface);
-  padding: 3px 6px;
-  border-radius: 4px;
+  border-radius: 6px;
+  display: block;
 }
 
 .nav-links {
