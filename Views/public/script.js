@@ -264,3 +264,28 @@ if (window.location.pathname.includes("event.html")) {
         });
     }
 }
+
+// CONTACT ENQUIRIES
+// =====================
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const enquiries = JSON.parse(localStorage.getItem("enquiries") || "[]");
+        enquiries.push({
+            name: document.getElementById("cName").value,
+            email: document.getElementById("cEmail").value,
+            message: document.getElementById("cMsg").value
+        });
+        localStorage.setItem("enquiries", JSON.stringify(enquiries));
+
+        const success = document.getElementById("contactSuccess");
+        if (success) {
+            success.classList.remove("hidden");
+        }
+
+        contactForm.reset();
+    });
+}
