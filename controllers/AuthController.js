@@ -2,6 +2,14 @@ const User = require("../models/Users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const setAuthCookie = (res, token) => {
+    res.cookie("token", token, {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 1000
+    });
+};
+
 
 // =====================
 // REGISTER
@@ -71,6 +79,8 @@ const loginUser = async (req, res) => {
             process.env.JWT_SECRET || "secret123",
             { expiresIn: "1h" }
         );
+
+     setAuthCookie(res, token);
 
      res.json({
     message: "Login successful",
