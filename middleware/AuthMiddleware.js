@@ -1,18 +1,24 @@
 // Middleware/AuthMiddleware.js
 const jwt = require('jsonwebtoken');
 
+const getCookieValue = (cookieHeader, name) => {
+    if (!cookieHeader) return null;
+
+    const cookies = cookieHeader.split(";").map((cookie) => cookie.trim());
+    const match = cookies.find((cookie) => cookie.startsWith(`${name}=`));
+
+    return match ? decodeURIComponent(match.split("=").slice(1).join("=")) : null;
+};
+
 const isAuthenticated = (req, res, next) => {
     try {
         // Get token from header
         const authHeader = req.headers.authorization;
-        
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ 
-                message: "Access denied. No token provided." 
-            });
-        }
-
-        const token = authHeader.split(' ')[1];
+        const bearerToken = authHeader?.startsWith("Bearer ")
+            ? authHeader.split(" ")[1]
+            : null;
+        const cookieToken = getCookieValue(req.headers.cookie, "token");
+        const token = bearerToken || cookieToken;
 
         if (!token) {
             return res.status(401).json({ 
@@ -21,7 +27,7 @@ const isAuthenticated = (req, res, next) => {
         }
 
         // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "your_jwt_secret_key");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret123");
 
         // Attach user data to request
         req.user = decoded;

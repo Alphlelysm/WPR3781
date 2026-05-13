@@ -1,4 +1,3 @@
-const mongoose = require("mongoose")
 const Booking = require("../models/Bookings")
 const Event = require("../models/Events")
 
@@ -7,8 +6,6 @@ const getAuthenticatedUserId = (req) => {
 }
 
 const createBooking = async (req, res) => {
-  const session = await mongoose.startSession()
-
   try {
     const eventId = req.params.eventId || req.body.eventId
     const quantity = Number(req.body.quantity) || 1
@@ -26,51 +23,34 @@ const createBooking = async (req, res) => {
       return res.status(400).json({ message: "Quantity must be at least 1" })
     }
 
-    let createdBooking
-
-    await session.withTransaction(async () => {
-      const event = await Event.findOneAndUpdate(
-        {
-          _id: eventId,
-          status: "available",
-          $expr: {
-            $lte: [{ $add: ["$bookedSeats", quantity] }, "$capacity"],
-          },
+    const event = await Event.findOneAndUpdate(
+      {
+        _id: eventId,
+        status: "available",
+        $expr: {
+          $lte: [{ $add: ["$bookedSeats", quantity] }, "$capacity"],
         },
-        [
-          {
-            $set: {
-              bookedSeats: { $add: ["$bookedSeats", quantity] },
-              status: {
-                $cond: [
-                  { $eq: [{ $add: ["$bookedSeats", quantity] }, "$capacity"] },
-                  "sold-out",
-                  "$status",
-                ],
-              },
-            },
-          },
-        ],
-        { new: true, session }
-      )
+      },
+      { $inc: { bookedSeats: quantity } },
+      { new: true }
+    )
 
-      if (!event) {
-        throw new Error("Not enough seats available or event not found")
-      }
+    if (!event) {
+      return res.status(400).json({
+        message: "Not enough seats available or event not found",
+      })
+    }
 
-      const [booking] = await Booking.create(
-        [
-          {
-            user: userId,
-            event: eventId,
-            quantity,
-            totalPrice: event.price * quantity,
-          },
-        ],
-        { session }
-      )
+    if (event.bookedSeats >= event.capacity && event.status !== "sold-out") {
+      event.status = "sold-out"
+      await event.save()
+    }
 
-      createdBooking = booking
+    const createdBooking = await Booking.create({
+      user: userId,
+      event: eventId,
+      quantity,
+      totalPrice: event.price * quantity,
     })
 
     const populatedBooking = await Booking.findById(createdBooking._id)
@@ -83,8 +63,6 @@ const createBooking = async (req, res) => {
       message: "Error creating booking",
       error: error.message,
     })
-  } finally {
-    await session.endSession()
   }
 }
 
