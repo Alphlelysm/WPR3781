@@ -1,99 +1,116 @@
-const Booking = require("../models/Bookings");
-const Event = require("../models/Events");
+const mongoose = require("mongoose")
+const Booking = require("../models/Bookings")
+const Event = require("../models/Events")
 
+const getAuthenticatedUserId = (req) => {
+  return req.user?.id || req.user?._id || req.session?.user?._id || req.body.userId
+}
 
-// CREATE BOOKING
 const createBooking = async (req, res) => {
-    try {
+  const session = await mongoose.startSession()
 
-        const { eventId, quantity } = req.body;
+  try {
+    const eventId = req.params.eventId || req.body.eventId
+    const quantity = Number(req.body.quantity) || 1
+    const userId = getAuthenticatedUserId(req)
 
-        const userId = req.session.user._id;
+    if (!userId) {
+      return res.status(401).json({ message: "Please login before booking" })
+    }
 
-        // Get event
-        const event = await Event.findById(eventId);
+    if (!eventId) {
+      return res.status(400).json({ message: "eventId is required" })
+    }
 
-        if (!event) {
-            return res.status(404).send("Event not found");
-        }
+    if (quantity < 1) {
+      return res.status(400).json({ message: "Quantity must be at least 1" })
+    }
 
-        // Check available seats
-        const availableSeats = event.capacity - event.bookedSeats;
+    let createdBooking
 
-        if (quantity > availableSeats) {
-            return res.status(400).send("Not enough seats available");
-        }
+    await session.withTransaction(async () => {
+      const event = await Event.findOneAndUpdate(
+        {
+          _id: eventId,
+          status: "available",
+          $expr: {
+            $lte: [{ $add: ["$bookedSeats", quantity] }, "$capacity"],
+          },
+        },
+        [
+          {
+            $set: {
+              bookedSeats: { $add: ["$bookedSeats", quantity] },
+              status: {
+                $cond: [
+                  { $eq: [{ $add: ["$bookedSeats", quantity] }, "$capacity"] },
+                  "sold-out",
+                  "$status",
+                ],
+              },
+            },
+          },
+        ],
+        { new: true, session }
+      )
 
-        // Calculate price
-        const totalPrice = event.price * quantity;
+      if (!event) {
+        throw new Error("Not enough seats available or event not found")
+      }
 
-        // Create booking
-        await Booking.create({
+      const [booking] = await Booking.create(
+        [
+          {
             user: userId,
             event: eventId,
             quantity,
-            totalPrice
-        });
+            totalPrice: event.price * quantity,
+          },
+        ],
+        { session }
+      )
 
-        // Update event seats
-        event.bookedSeats += Number(quantity);
-        await event.save();
+      createdBooking = booking
+    })
 
-        res.redirect("/bookings");
+    const populatedBooking = await Booking.findById(createdBooking._id)
+      .populate("event", "title date venue price category")
+      .populate("user", "name email")
 
-    } catch (error) {
-        res.status(500).send(error.message);
+    return res.status(201).json(populatedBooking)
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error creating booking",
+      error: error.message,
+    })
+  } finally {
+    await session.endSession()
+  }
+}
+
+const getUserBookings = async (req, res) => {
+  try {
+    const userId = getAuthenticatedUserId(req)
+
+    if (!userId) {
+      return res.status(401).json({ message: "Please login first" })
     }
-};
 
+    const bookings = await Booking.find({ user: userId })
+      .populate("event", "title category date venue price")
+      .sort({ createdAt: -1 })
 
-// GET TOP 5 POPULAR EVENTS
-const getPopularEvents = async (req, res) => {
-    try {
+    return res.json(bookings)
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error loading bookings",
+      error: error.message,
+    })
+  }
+}
 
-        const popularEvents = await Booking.aggregate([
-            {
-                $group: {
-                    _id: "$event",
-                    ticketsSold: { $sum: "$quantity" }
-                }
-            },
-            {
-                $sort: { ticketsSold: -1 }
-            },
-            {
-                $lookup: {
-                    from: "events",
-                    localField: "_id",
-                    foreignField: "_id",
-                    as: "eventData"
-                }
-            },
-            {
-                $unwind: "$eventData"
-            },
-            {
-                $project: {
-                    _id: 0,
-                    title: "$eventData.title",
-                    ticketsSold: 1
-                }
-            },
-            {
-                $limit: 5
-            }
-        ]);
-
-        res.json(popularEvents);
-
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-};
-
-
-// EXPORT
+//exports
 module.exports = {
-    createBooking,
-    getPopularEvents
-};
+  createBooking,
+  getUserBookings,
+}

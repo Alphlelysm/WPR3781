@@ -68,7 +68,9 @@ app.use(
 // API Routes
 app.use("/api/auth", require("./routes/AuthRoutes"))
 app.use("/api/admin", require("./routes/AdminRoutes"))
-// ... other routes
+app.use("/api/events", require("./routes/EventRoutes"))
+app.use("/api/bookings", require("./routes/BookingRoutes"))
+app.use("/api/enquiries", require("./routes/EnquiryRoutes"))
 
 // Connect to Database + Start Server
 connectDB().then(() => {
