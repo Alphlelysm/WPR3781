@@ -2,11 +2,51 @@ const Event = require("../models/Events");
 
 
 // Create event
-const createEvent = async (req, res) => {
+const createEvent = async (req, res) =>
+ { 
+    try 
+    { 
+        await Event.create(req.body); 
+        res.redirect("/events"); 
+    } 
+    catch (error) 
+    { 
+        res.status(500) .send(error.message); 
+    } 
+};
+
+
+
+// Get all events
+const getEvents = async (req, res) => {
 
     try {
 
-        await Event.create(req.body);
+        const events =
+            await Event.find();
+
+        res.render(
+            "events/index",
+            { events }
+        );
+
+    } catch (error) {
+
+        res.status(500)
+            .send(error.message);
+
+    }
+
+};
+
+// Delete event
+const deleteEvent = async (req, res) => {
+
+    try {
+
+        await Event.findByIdAndDelete(
+            req.params.id
+        );
 
         res.redirect("/events");
 
@@ -19,36 +59,62 @@ const createEvent = async (req, res) => {
 
 };
 
+const updateEvent = async (req, res) => 
+{
+
+        try 
+        {
+
+            const eventId =  req.params.id;
+
+            const updatedEvent = await Event.findByIdAndUpdate
+            (
+
+                eventId, req.body,
+                {
+                    new: true,
+                    runValidators: true
+                }
+
+            );
 
 
-// Get all events
-const getEvents = async (req, res) => {
+            if (!updatedEvent) 
+            {
 
-    const events =
-        await Event.find();
+                return res
+                    .status(404)
+                    .send
+                    (
+                        "Event not found"
+                    );
 
-    res.render("events/index", {
-        events
-    });
+            }
+
+
+            res.redirect(
+                "/events"
+            );
+
+        } 
+        catch (error) 
+        {
+
+            res.status(500)
+                .send
+                (
+                    error.message
+                );
+
+        }      
 
 };
 
-
-
-// Delete event
-const deleteEvent = async (req, res) => {
-
-    await Event.findByIdAndDelete(
-        req.params.id
-    );
-
-    res.redirect("/events");
-
-};
 
 
 module.exports = {
     createEvent,
     getEvents,
+     updateEvent,
     deleteEvent
 };
